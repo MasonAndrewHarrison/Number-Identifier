@@ -31,7 +31,7 @@ if __name__ == "__main__":
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-    num_epochs = 300
+    num_epochs = 10
     batch_size = 100
     learning_rate = 0.01
 
@@ -48,6 +48,11 @@ if __name__ == "__main__":
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
     test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
 
+    transform = transforms.RandomAffine(
+        degrees=30,  
+        translate=(0.25, 0.25)  
+    )
+
     def print_accuracy(model, test_loader):
 
         model.eval()
@@ -60,6 +65,8 @@ if __name__ == "__main__":
 
                 images = images.to(device)
                 labels = labels.to(device)
+
+                images = transform(images)
 
                 output = model(images)
 
@@ -86,6 +93,8 @@ if __name__ == "__main__":
             images = images.to(device)
             labels = labels.to(device)
 
+            images = transform(images)
+
             output = model(images)
             loss = criterion(output, labels)
 
@@ -97,8 +106,7 @@ if __name__ == "__main__":
                 print(f'Epoch [{epoch}/{num_epochs}] | Loss: {loss}')
         
         print_accuracy(model, test_loader)
-
-    torch.save(model.state_dict(), "CNN_Weights.pth")
+        torch.save(model.state_dict(), "CNN_Weights.pth")
 
 
 

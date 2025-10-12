@@ -4,6 +4,8 @@ import numpy as np
 from train import ConvNet
 import pygame
 from PIL import Image
+import torchvision.transforms as transforms
+from torchvision.transforms import functional as F
 
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -45,9 +47,7 @@ def get_28x28_matrix():
 
 def prediction(matrix):
 
-    matrix = get_28x28_matrix()
-    tensor = torch.from_numpy(matrix).float()
-    tensor = tensor.unsqueeze(0).unsqueeze(0).to(device)
+    tensor = torch.from_numpy(matrix).float().unsqueeze(0).unsqueeze(0).to(device)
     output = 0
 
     with torch.no_grad():
@@ -55,7 +55,7 @@ def prediction(matrix):
 
     _, predicted = torch.max(output, 1)
 
-    return predicted.item()
+    return predicted.item(), output
 
 
 def drawStroke(stroke):
@@ -114,11 +114,11 @@ while running:
     drawStroke(current_stroke)
 
     matrix = get_28x28_matrix()
-    output = prediction(matrix)
-    print(output)
+    predicted, output = prediction(matrix)
+    print(predicted, " | ", output)
 
     if space_pressed:
-        print(matrix.shape)
+
         plt.imshow(matrix, cmap='gray') 
         plt.show()
         
