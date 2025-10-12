@@ -113,7 +113,7 @@ while running:
     if right_clicked:
         strokes_list = []
 
-    drawAllStrokes(current_stroke, strokes_list, 70)
+    drawAllStrokes(current_stroke, strokes_list, 80)
     matrix = get_28x28_matrix()
     screen.fill(BLACK)
     drawAllStrokes(current_stroke, strokes_list, 20)
