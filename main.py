@@ -42,7 +42,7 @@ def get_28x28_matrix():
     temp_image = temp_image.convert('L')
     temp_image = temp_image.resize((28, 28), Image.LANCZOS)
 
-    matrix = np.array(temp_image) / 255.0
+    matrix = (np.array(temp_image) / 255.0)*2 - 1
     return matrix
 
 def prediction(matrix):
@@ -58,11 +58,18 @@ def prediction(matrix):
     return predicted.item(), output
 
 
-def drawStroke(stroke):
+def drawStroke(stroke, diameter):
 
     for i, point in enumerate(stroke):
         if len(stroke) > 1 and not i == 0:
-            pygame.draw.line(screen, WHITE, stroke[i-1], point, 30)
+            pygame.draw.line(screen, WHITE, stroke[i-1], point, diameter)
+
+def drawAllStrokes(current_stroke, strokes_list, diameter):
+
+    for stroke in strokes_list:
+        drawStroke(stroke, diameter)
+
+    drawStroke(current_stroke, diameter)  
 
 while running:
 
@@ -96,8 +103,6 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-    screen.fill(BLACK)
-
     if (left_clicked and mouse_moved): 
         current_stroke.append((mouse_x, mouse_y))
 
@@ -108,14 +113,13 @@ while running:
     if right_clicked:
         strokes_list = []
 
-    for stroke in strokes_list:
-        drawStroke(stroke)
-
-    drawStroke(current_stroke)
-
+    drawAllStrokes(current_stroke, strokes_list, 70)
     matrix = get_28x28_matrix()
+    screen.fill(BLACK)
+    drawAllStrokes(current_stroke, strokes_list, 20)
+
     predicted, output = prediction(matrix)
-    print(predicted, " | ", output)
+    print(predicted)
 
     if space_pressed:
 

@@ -6,37 +6,45 @@ from torch.utils.data import DataLoader
 import matplotlib.pyplot as plt
 import numpy as np 
 import os
-
+import random
 
 class ConvNet(nn.Module):
     def __init__(self):
         super(ConvNet, self).__init__()
-        self.conv1 = nn.Conv2d(1, 2, 3)
-        self.conv2 = nn.Conv2d(2, 2, 3)
+        self.conv1 = nn.Conv2d(1, 2, 5)
+        self.conv2 = nn.Conv2d(2, 4, 5)
         self.pool = nn.MaxPool2d(2, 2)
-        self.fc1 = nn.Linear(2 * 5 * 5, 25)
-        self.fc2 = nn.Linear(25, 25)
-        self.fc3 = nn.Linear(25, 10)
+        self.fc1 = nn.Linear(4 * 4 * 4, 50)
+        self.fc2 = nn.Linear(50, 50)
+        self.fc3 = nn.Linear(50, 25)
+        self.fc4 = nn.Linear(25, 10)
     
     def forward(self, x):
         x = self.pool(F.relu(self.conv1(x)))
         x = self.pool(F.relu(self.conv2(x)))
-        x = x.view(-1, 2 * 5 * 5)
+        x = x.view(-1, 4 * 4 * 4)
         x = F.relu(self.fc1(x))
         x = F.relu(self.fc2(x))
-        x = self.fc3(x)
+        x = F.relu(self.fc3(x))
+        x = self.fc4(x)
         return x
 
 if __name__ == "__main__":
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    print(device)
 
-    num_epochs = 10
-    batch_size = 100
-    learning_rate = 0.01
+    num_epochs = 100
+    batch_size = 128
+    learning_rate = 0.1
 
     transform = transforms.Compose([
         transforms.ToTensor(),
+        transforms.RandomAffine(
+            degrees=30,  
+            translate=(0.2, 0.2),
+            scale=(0.8, 1.2)
+        ),
         transforms.Normalize((0.5,), (0.5,))
     ])
 
@@ -47,11 +55,6 @@ if __name__ == "__main__":
 
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
     test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
-
-    transform = transforms.RandomAffine(
-        degrees=30,  
-        translate=(0.25, 0.25)  
-    )
 
     def print_accuracy(model, test_loader):
 
@@ -66,8 +69,6 @@ if __name__ == "__main__":
                 images = images.to(device)
                 labels = labels.to(device)
 
-                images = transform(images)
-
                 output = model(images)
 
                 _, predicted = torch.max(output, 1)
@@ -80,20 +81,39 @@ if __name__ == "__main__":
 
     model = ConvNet().to(device)
 
+    def check_rand_img(model, test_loader):
+
+        model.eval()
+        with torch.no_grad():
+
+            random_num = random.randint(0, len(test_loader.dataset) - 1)
+            random_image,_ = test_loader.dataset[random_num]
+
+            random_image = random_image.to(device).unsqueeze(0)
+
+            output = model(random_image)
+            _, predicted = torch.max(output, 1)
+
+            print(predicted.item())
+
+            plt.imshow(random_image[0, 0,: , :].cpu(), cmap='gray') 
+            plt.show()
+        
+
     if os.path.exists("CNN_Weights.pth"):
         model.load_state_dict(torch.load("CNN_Weights.pth"))
 
     criterion = nn.CrossEntropyLoss()
     optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
-
+    
+    check_rand_img(model, test_loader)
+    print_accuracy(model, test_loader)
 
     for epoch in range(num_epochs):
         for i, (images, labels) in enumerate(train_loader):
 
             images = images.to(device)
             labels = labels.to(device)
-
-            images = transform(images)
 
             output = model(images)
             loss = criterion(output, labels)
@@ -102,7 +122,7 @@ if __name__ == "__main__":
             loss.backward()
             optimizer.step()
 
-            if i % 100 == 0:
+            if i % 200 == 0:
                 print(f'Epoch [{epoch}/{num_epochs}] | Loss: {loss}')
         
         print_accuracy(model, test_loader)
