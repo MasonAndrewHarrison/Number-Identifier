@@ -1,4 +1,4 @@
-apparmor==4.1.1
+apparmor==4.1.1; sys_platform == 'linux'
 attrs==25.3.0
 autocommand==2.2.2
 certifi==2025.7.14
