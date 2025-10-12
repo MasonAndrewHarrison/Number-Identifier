@@ -62,7 +62,7 @@ def drawStroke(stroke):
 
     for i, point in enumerate(stroke):
         if len(stroke) > 1 and not i == 0:
-            pygame.draw.line(screen, WHITE, stroke[i-1], point, 50)
+            pygame.draw.line(screen, WHITE, stroke[i-1], point, 30)
 
 while running:
 
