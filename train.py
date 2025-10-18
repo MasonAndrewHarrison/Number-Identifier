@@ -45,14 +45,14 @@ if __name__ == "__main__":
 
     num_epochs = 10
     batch_size = 64
-    learning_rate = 0.01
+    learning_rate = 0.005
 
     transform = transforms.Compose([
         transforms.ToTensor(),
         transforms.RandomAffine(
             degrees=30,  
-            translate=(0.2, 0.2),
-            scale=(0.8, 1.2)
+            translate=(0.3, 0.3),
+            scale=(0.8, 1.15)
         ),
         transforms.Normalize((0.5,), (0.5,))
     ])
