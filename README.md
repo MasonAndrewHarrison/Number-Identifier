@@ -28,6 +28,6 @@
 
 ## How It Works
 
-<img src="images/img1.png" alt="Logo" width="200"/>
-<img src="images/img2.png" alt="Logo" width="200"/>
-<img src="images/img3.png" alt="Logo" width="200"/>
+<img src="images/img1.png" alt="img1" width="500"/>
+<img src="images/img2.png" alt="img2" width="500"/>
+<img src="images/img3.png" alt="img3" width="500"/>
