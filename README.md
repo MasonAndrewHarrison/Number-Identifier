@@ -2,8 +2,11 @@
 ## Setup
 1. Clone this repository:\
    `git clone https://github.com/MasonAndrewHarrison/Number-Identifier.git`
-   
-3. Create virtual environment:\
+
+2. Change Directory:\
+   `cd Number-Identifier`
+      
+4. Create virtual environment:\
    `python -m venv venv`
    
 5. Activate it:\
