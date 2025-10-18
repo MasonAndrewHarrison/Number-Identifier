@@ -1,5 +1,5 @@
 
-## Setup
+## Installation
 1. Clone this repository:\
    `git clone https://github.com/MasonAndrewHarrison/Number-Identifier.git`
 
@@ -23,3 +23,11 @@
    
 10. Run:\
     `python main.py`
+
+
+
+## Demo
+
+![Alt text](images/img1.png)
+![Alt text](images/img2.png)
+![Alt text](images/img3.png)
