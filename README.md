@@ -11,7 +11,7 @@
    
 5. Activate it:\
    (Linux)`source venv/bin/activate`\
-   (Windows CMD)`venv\Scripts\activate.bat`
+   (Windows CMD)`venv\Scripts\activate.bat`\
    (Windows Power Shell)`venv\Scripts\Activate.ps1`
    
 7. Install PyTorch:\
