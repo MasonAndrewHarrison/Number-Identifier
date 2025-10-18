@@ -11,20 +11,27 @@ import random
 class ConvNet(nn.Module):
     def __init__(self):
         super(ConvNet, self).__init__()
-        self.conv1 = nn.Conv2d(1, 2, 5)
-        self.conv2 = nn.Conv2d(2, 4, 5)
+        self.conv1 = nn.Conv2d(1, 32, 3, padding=1)
+        self.conv2 = nn.Conv2d(32, 64, 3, padding=1)
+        self.conv3 = nn.Conv2d(64, 64, 3, padding=1)
+        self.bn1 = nn.BatchNorm2d(32)
+        self.bn2 = nn.BatchNorm2d(64)
         self.pool = nn.MaxPool2d(2, 2)
-        self.fc1 = nn.Linear(4 * 4 * 4, 50)
+        self.dropout1 = nn.Dropout(0.20)
+        self.dropout2 = nn.Dropout(0.25)
+        self.fc1 = nn.Linear(64 * 7 * 7, 50)
+        self.bn3 = nn.BatchNorm1d(50)
         self.fc2 = nn.Linear(50, 50)
         self.fc3 = nn.Linear(50, 25)
         self.fc4 = nn.Linear(25, 10)
     
     def forward(self, x):
-        x = self.pool(F.relu(self.conv1(x)))
-        x = self.pool(F.relu(self.conv2(x)))
-        x = x.view(-1, 4 * 4 * 4)
-        x = F.relu(self.fc1(x))
-        x = F.relu(self.fc2(x))
+        x = F.relu(self.bn1(self.conv1(x)))
+        x = self.dropout1(self.pool(F.relu(self.conv2(x))))
+        x = self.pool(F.relu(self.bn2(self.conv3(x))))
+        x = x.view(-1, 64 * 7 * 7)
+        x = F.relu(self.bn3(self.fc1(x)))
+        x = self.dropout2(F.relu(self.fc2(x)))
         x = F.relu(self.fc3(x))
         x = self.fc4(x)
         return x
@@ -34,9 +41,9 @@ if __name__ == "__main__":
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     print(device)
 
-    num_epochs = 100
+    num_epochs = 10
     batch_size = 64
-    learning_rate = 0.05
+    learning_rate = 0.01
 
     transform = transforms.Compose([
         transforms.ToTensor(),
@@ -102,12 +109,11 @@ if __name__ == "__main__":
 
     if os.path.exists("CNN_Weights.pth"):
         model.load_state_dict(torch.load("CNN_Weights.pth"))
+        check_rand_img(model, test_loader)
+        print_accuracy(model, test_loader)
 
     criterion = nn.CrossEntropyLoss()
-    optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
-    
-    check_rand_img(model, test_loader)
-    print_accuracy(model, test_loader)
+    optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate, weight_decay=0.01)
 
     for epoch in range(num_epochs):
         for i, (images, labels) in enumerate(train_loader):
