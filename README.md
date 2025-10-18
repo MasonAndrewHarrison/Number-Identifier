@@ -28,6 +28,6 @@
 
 ## How It Works
 
-![Error](images/img1.png)
-![Error](images/img2.png)
-![Error](images/img3.png)
+<img src="images/img1.png" alt="Logo" width="200"/>
+<img src="images/img2.png" alt="Logo" width="200"/>
+<img src="images/img3.png" alt="Logo" width="200"/>
