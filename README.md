@@ -13,10 +13,11 @@
    (Linux)`source venv/bin/activate`\
    (Windows)`source venv/bin/activate`
    
-7. For GPU Compute(Optional):\
-   `pip3 install torch torchvision --index-url https://download.pytorch.org/whl/cu130`
+7. Install PyTorch:\
+   (For CUDA)`pip3 install torch torchvision --index-url https://download.pytorch.org/whl/cu130`
+   (For CPU)`pip3 install torch torchvision --index-url https://download.pytorch.org/whl/cpu`
    
-8. Install dependencies:\
+9. Install dependencies:\
    `pip install -r requirements.txt`
    
 10. Run:\
