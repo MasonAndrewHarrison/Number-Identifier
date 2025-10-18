@@ -63,7 +63,8 @@ def drawStroke(stroke, diameter):
 
     for i, point in enumerate(stroke):
         if len(stroke) > 1 and not i == 0:
-            pygame.draw.line(screen, WHITE, stroke[i-1], point, diameter)
+            pygame.draw.line(screen, WHITE, stroke[i-1], stroke[i], diameter)
+            pygame.draw.circle(screen, WHITE, stroke[i], diameter // 2 - 1.5)
 
 def drawAllStrokes(current_stroke, strokes_list, diameter):
 
@@ -114,13 +115,12 @@ while running:
     if right_clicked:
         strokes_list = []
 
-    drawAllStrokes(current_stroke, strokes_list, 80)
+    drawAllStrokes(current_stroke, strokes_list, 70)
     matrix = get_28x28_matrix()
     screen.fill(BLACK)
     drawAllStrokes(current_stroke, strokes_list, 20)
 
     predicted, output = prediction(matrix)
-    print(predicted)
 
     text = font.render(f"{predicted}", True, (0, 255, 0))
     text_rectangle = text.get_rect(topright=(SCREEN_WIDTH - 20, 20))
