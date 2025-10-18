@@ -14,9 +14,10 @@ model.load_state_dict(torch.load("CNN_Weights.pth", map_location=device))
 model.eval()
 
 pygame.init()
+font = pygame.font.Font(None, 74)
 
-SCREEN_WIDTH = 1000
-SCREEN_HEIGHT = 1000
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 800
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -120,6 +121,10 @@ while running:
 
     predicted, output = prediction(matrix)
     print(predicted)
+
+    text = font.render(f"{predicted}", True, (0, 255, 0))
+    text_rectangle = text.get_rect(topright=(SCREEN_WIDTH - 20, 20))
+    screen.blit(text, text_rectangle)
 
     if space_pressed:
 
