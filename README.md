@@ -11,7 +11,7 @@
    (Windows)`source venv/bin/activate`
    
 7. For GPU Compute(Optional):\
-   `pip install torch==2.8.0 torchvision==0.23.0 torchaudio==2.8.0 --index-url https://download.pytorch.org/whl/cu""your cuda version<-here""`
+   `pip install torch==2.8.0 torchvision==0.23.0 torchaudio==2.8.0 --index-url https://download.pytorch.org/whl/cu`**"Your Cuda version"**
    
 8. Install dependencies:\
    `pip install -r requirements.txt`
