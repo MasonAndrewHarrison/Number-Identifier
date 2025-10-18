@@ -14,7 +14,7 @@
    (Windows)`source venv/bin/activate`
    
 7. Install PyTorch:\
-   (For CUDA)`pip3 install torch torchvision --index-url https://download.pytorch.org/whl/cu130`
+   (For CUDA)`pip3 install torch torchvision --index-url https://download.pytorch.org/whl/cu130`\
    (For CPU)`pip3 install torch torchvision --index-url https://download.pytorch.org/whl/cpu`
    
 9. Install dependencies:\
