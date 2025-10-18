@@ -65,6 +65,7 @@ if __name__ == "__main__":
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
     test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
 
+
     def print_accuracy(model, test_loader):
 
         model.eval()
@@ -89,7 +90,7 @@ if __name__ == "__main__":
             print(f"Accuracy: {accuracy:.2f} %")
             return accuracy
 
-    model = ConvNet().to(device)
+    
 
     def check_rand_img(model, test_loader):
 
@@ -109,9 +110,11 @@ if __name__ == "__main__":
             plt.imshow(random_image[0, 0,: , :].cpu(), cmap='gray') 
             plt.show()
         
+    model = ConvNet().to(device)
 
     if os.path.exists("CNN_Weights.pth"):
-        model.load_state_dict(torch.load("CNN_Weights.pth"))
+        model.load_state_dict(torch.load("CNN_Weights.pth", map_location=device))
+        model.to(device)
         check_rand_img(model, test_loader)
         print_accuracy(model, test_loader)
 

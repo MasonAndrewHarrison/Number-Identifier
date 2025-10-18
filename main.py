@@ -10,7 +10,7 @@ from torchvision.transforms import functional as F
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 model = ConvNet().to(device)
-model.load_state_dict(torch.load("CNN_Weights.pth"))
+model.load_state_dict(torch.load("CNN_Weights.pth", map_location=device))
 model.eval()
 
 pygame.init()
