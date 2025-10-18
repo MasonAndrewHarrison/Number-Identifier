@@ -11,7 +11,8 @@
    
 5. Activate it:\
    (Linux)`source venv/bin/activate`\
-   (Windows)`source venv/bin/activate`
+   (Windows CMD)`venv\Scripts\activate.bat`
+   (Windows Power Shell)`venv\Scripts\Activate.ps1`
    
 7. Install PyTorch:\
    (For CUDA)`pip3 install torch torchvision --index-url https://download.pytorch.org/whl/cu130`\
